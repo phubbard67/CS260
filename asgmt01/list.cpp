@@ -5,18 +5,17 @@ using namespace std;
 
 const char	List::YOUR_NAME[] = "Paul Hubbard";
 
-List::List() :
-	headByName{nullptr},
-	headByIntensity{nullptr}
+List::List() 
 {
 	// your code here, or in this constructor's initialization list
-
+	headByName = nullptr;
+	headByIntensity = nullptr;
 }
 
 List::~List() 
 {
 	// your code here
-	
+	//Node * 
 	
 }
 
