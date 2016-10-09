@@ -1,0 +1,66 @@
+CS260 - Assignment 1 - I. Forgot
+
++++ list by name
+name                      party            intensity
+----                      -----            ---------
+Jane Q. Public            Democrat                43
+Jim Q. Public             Green                   80
+Joan Q. Public            Libertarian            100
+Joe Q. Public             Libertarian              0
+John Q. Public            Republican              91
+
++++ list by intensity
+name                      party            intensity
+----                      -----            ---------
+Joan Q. Public            Libertarian            100
+John Q. Public            Republican              91
+Jim Q. Public             Green                   80
+Jane Q. Public            Democrat                43
+Joe Q. Public             Libertarian              0
+
+>>> removing Jim Q. Public
+
++++ list by name
+name                      party            intensity
+----                      -----            ---------
+Jane Q. Public            Democrat                43
+Joan Q. Public            Libertarian            100
+Joe Q. Public             Libertarian              0
+John Q. Public            Republican              91
+
++++ list by intensity
+name                      party            intensity
+----                      -----            ---------
+Joan Q. Public            Libertarian            100
+John Q. Public            Republican              91
+Jane Q. Public            Democrat                43
+Joe Q. Public             Libertarian              0
+
+>>> inserting Jed Q. Public
+
++++ list by name
+name                      party            intensity
+----                      -----            ---------
+Jane Q. Public            Democrat                43
+Jed Q. Public             Libertarian             90
+Joan Q. Public            Libertarian            100
+Joe Q. Public             Libertarian              0
+John Q. Public            Republican              91
+
++++ list by intensity
+name                      party            intensity
+----                      -----            ---------
+Joan Q. Public            Libertarian            100
+John Q. Public            Republican              91
+Jed Q. Public             Libertarian             90
+Jane Q. Public            Democrat                43
+Joe Q. Public             Libertarian              0
+
+>>> search for "Jed Q. Public"
+
+Jed Q. Public             Libertarian             90
+
+>>> search for "Didn't Register"
+
+not found
+
