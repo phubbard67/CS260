@@ -15,7 +15,19 @@ List::List()
 List::~List() 
 {
 	// your code here
-	//Node * 
+	Node * nodeName{headByName};
+	Node * nodeIntensity{headByIntensity};
+	Node * nextByInt;
+	Node * nextByName;
+
+	while(nodeName && nodeIntensity){
+		nextByInt = nodeIntensity->nextByIntensity;
+		nextByName = nodeName->nextByName;
+		delete nodeName;
+		delete nodeIntensity;
+		nodeIntensity = nextByInt;
+		nodeName = nextByName;
+	}
 	
 }
 
