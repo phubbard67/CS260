@@ -4,7 +4,10 @@
 
 using namespace std;
 
-Voter::Voter(const char * const name, const Party party, const int intensity)
+Voter::Voter(const char * const name, const Party party, const int intensity) :
+name{nullptr},
+party{},
+intensity{0}
 {
 	// your code here, or in this constructor's initialization list
 }
@@ -12,6 +15,7 @@ Voter::Voter(const char * const name, const Party party, const int intensity)
 Voter::~Voter()
 {
 	// your code here
+	delete name;
 }
 
 void Voter::displayColumnHeadings(ostream& out)
