@@ -13,7 +13,6 @@ intensity{intensity}
 	name = {new char[strlen(nme) + 1]};
 	strcpy(name, nme);
 }
-
 Voter::~Voter()
 {
 	// your code here

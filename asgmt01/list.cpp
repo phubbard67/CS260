@@ -55,6 +55,14 @@ void List::displayByName(ostream& out) const
 void List::displayByIntensity(ostream& out) const
 {
 	// your code here
+	Node * node{headByIntensity};
+
+	Voter::displayColumnHeadings(out);
+
+	while(node){
+		out << &node->item << endl;
+		node = node->nextByName;
+	}
 }
 
 void List::insert(const Voter& voter)
@@ -68,8 +76,18 @@ void List::insert(const Voter& voter)
 	if(headByName == nullptr){
 		 headByName = node;
 		 headByIntensity = node;
+		 return;
 	}
-
+/*	else{
+		while(node){
+			int nameComp = strcmp(nextName->name, node->name);
+			
+				if(nameComp < 0){
+					
+				}
+			nextName
+		}
+	}*/
 		
 
 }
@@ -77,6 +95,16 @@ void List::insert(const Voter& voter)
 Voter* const List::find(const char * const name) const
 {
 	// your code here, return the appropriate value
+	
+	Node * node{headByName};
+	//Voter * voterName{nullptr};
+	while(node){
+		if(strcmp(node->item.getName(), name) == 0){
+		
+			return &node->item;
+		}
+		node = node->nextByName;
+	}
 
 	return nullptr;
 }
@@ -84,6 +112,28 @@ Voter* const List::find(const char * const name) const
 bool List::remove(const char * const name)
 {
 	// your code here, return the appropriate value
-	
+	Node * node{headByName};
+	Node * prevPtr = nullptr;
+
+	while(node){
+		if(strcmp(node->item.getName(), name) == 0){
+			if(prevPtr == nullptr){
+				node = headByName;
+				headByName = node->nextByName;
+				headByIntensity = node->nextByIntensity;
+				delete node;
+				return true;
+			}
+			else{
+				node = prevPtr->nextByName;
+				prevPtr->nextByName = node->nextByName;
+				prevPtr->nextByIntensity = node->nextByIntensity;
+				delete node;
+				return true;
+			}
+		}
+		prevPtr = node;
+		node = node->nextByName;
+	}	
 	return false;
 }

@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	displayVoters(cout);
 
 	cout << endl << ">>> removing Jim Q. Public" << endl <<  endl;
-	voters->remove("Jim Q. Public");
+	voters->remove("John Q. Public");                  //change back to Jim
 
 	displayVoters(cout);
 
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 	displayVoters(cout);
 
 	cout << endl << ">>> search for \"Jed Q. Public\"" << endl << endl;
-	vPtr = voters->find("Jed Q. Public");
+	vPtr = voters->find("John Q. Public");            //change back to Jed -------------------------------
 	if (vPtr != 0)
 		cout << vPtr;
 	else
