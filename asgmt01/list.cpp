@@ -69,25 +69,42 @@ void List::insert(const Voter& voter)
 {
 	// your code here
 	Node * node = new Node(voter);
-//	Node * nodeByInten{headByIntensity};
-//	Node * nextName;
-//	Node * nextByIntensity;
+	//Node * nodeByInten{headByIntensity};
+	Node * nodeByName{headByName};
+	//Node * prevByName = nullptr;
+	//Node * prevByInten = nullptr;
 
 	if(headByName == nullptr){
 		 headByName = node;
 		 headByIntensity = node;
 		 return;
 	}
-/*	else{
-		while(node){
-			int nameComp = strcmp(nextName->name, node->name);
-			
-				if(nameComp < 0){
-					
+		while(nodeByName){
+			int nameComp = strcmp(nodeByName->item.getName(), node->item.getName());
+				if(nameComp == 0){
+					return;
 				}
-			nextName
+				if(nameComp > 0){
+					node->nextByName = nodeByName->nextByName;
+					nodeByName->nextByName = node;
+				}
+				/*else if(nameComp > 0){
+					prevByName->nextByName = node;
+					node->nextByName = nodeByName;
+				}*/
+				//prevByName = nodeByName;
+				nodeByName = nodeByName->nextByName;
+			/*while(nodeByInten){
+					if(nodeByInten->item.getIntensity() <= node->item.getIntensity()){
+						node->nextByIntensity = nodeByInten->nextByIntensity;
+						nodeByInten->nextByIntensity = node;
+						return;
+					}
+					//prevByInten = nodeByInten;
+					nodeByInten = nodeByInten->nextByIntensity;
+			}*/
 		}
-	}*/
+	return;
 		
 
 }
