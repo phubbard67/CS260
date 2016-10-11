@@ -71,29 +71,35 @@ void List::insert(const Voter& voter)
 	Node * node = new Node(voter);
 	//Node * nodeByInten{headByIntensity};
 	Node * nodeByName{headByName};
-	//Node * prevByName = nullptr;
+	Node * prevByName{nullptr};
 	//Node * prevByInten = nullptr;
 
-	if(headByName == nullptr){
-		 headByName = node;
-		 headByIntensity = node;
-		 return;
-	}
+		if(headByName == nullptr){
+		 	headByName = node;
+		 	headByIntensity = node;
+		}
+
 		while(nodeByName){
-			int nameComp = strcmp(nodeByName->item.getName(), node->item.getName());
-				if(nameComp == 0){
-					return;
+				
+				int nameComp = strcmp(node->item.getName(), nodeByName->item.getName());
+				
+				if((prevByName == nullptr) && (nameComp < 0)){
+					node->nextByName = headByName;
+					headByName = node;
 				}
-				if(nameComp > 0){
-					node->nextByName = nodeByName->nextByName;
+				else if((nameComp > 0) && (nodeByName->nextByName == nullptr)){
 					nodeByName->nextByName = node;
-				}
-				/*else if(nameComp > 0){
-					prevByName->nextByName = node;
+				}	
+				else if(nameComp < 0){
 					node->nextByName = nodeByName;
-				}*/
-				//prevByName = nodeByName;
-				nodeByName = nodeByName->nextByName;
+					prevByName->nextByName = node;
+				}
+				
+				
+				
+					prevByName = nodeByName;
+					nodeByName = nodeByName->nextByName;
+				
 			/*while(nodeByInten){
 					if(nodeByInten->item.getIntensity() <= node->item.getIntensity()){
 						node->nextByIntensity = nodeByInten->nextByIntensity;
@@ -103,6 +109,7 @@ void List::insert(const Voter& voter)
 					//prevByInten = nodeByInten;
 					nodeByInten = nodeByInten->nextByIntensity;
 			}*/
+				
 		}
 	return;
 		
