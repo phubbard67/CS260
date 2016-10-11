@@ -69,48 +69,60 @@ void List::insert(const Voter& voter)
 {
 	// your code here
 	Node * node = new Node(voter);
-	//Node * nodeByInten{headByIntensity};
+	Node * nodeByInten{headByIntensity};
 	Node * nodeByName{headByName};
 	Node * prevByName{nullptr};
-	//Node * prevByInten = nullptr;
+	Node * prevByInten{nullptr};
 
 		if(headByName == nullptr){
 		 	headByName = node;
 		 	headByIntensity = node;
 		}
 
-		while(nodeByName){
+		else {
+			while(nodeByName){
 				
 				int nameComp = strcmp(node->item.getName(), nodeByName->item.getName());
 				
-				if((prevByName == nullptr) && (nameComp < 0)){
-					node->nextByName = headByName;
-					headByName = node;
-				}
-				else if((nameComp > 0) && (nodeByName->nextByName == nullptr)){
-					nodeByName->nextByName = node;
-				}	
-				else if(nameComp < 0){
-					node->nextByName = nodeByName;
-					prevByName->nextByName = node;
-				}
+				if(nameComp < 0){
+					if(prevByName == nullptr){
+						node->nextByName = headByName;
+						headByName = node;
+						break;
+					}	
 				
-				
+					else{
+						node->nextByName = prevByName->nextByName;
+						prevByName->nextByName = node;
+						break;
+					}
+				}				
 				
 					prevByName = nodeByName;
 					nodeByName = nodeByName->nextByName;
 				
-			/*while(nodeByInten){
-					if(nodeByInten->item.getIntensity() <= node->item.getIntensity()){
-						node->nextByIntensity = nodeByInten->nextByIntensity;
-						nodeByInten->nextByIntensity = node;
-						return;
+			}
+			while(nodeByInten){
+					if(node->item.getIntensity() > nodeByInten->item.getIntensity()){
+						if(prevByInten == nullptr){
+							node->nextByIntensity = headByIntensity;
+							headByIntensity = node;
+							break;
+						}
+						else{
+							node->nextByIntensity = prevByInten->nextByIntensity;
+							prevByInten->nextByIntensity = node;
+							break;
+						}
 					}
-					//prevByInten = nodeByInten;
+					prevByInten = nodeByInten;
 					nodeByInten = nodeByInten->nextByIntensity;
+			}
+			/*if(nodeByInten == nullptr){
+				prevByInten->nextByIntensity = node;
 			}*/
-				
 		}
+
 	return;
 		
 
