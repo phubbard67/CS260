@@ -132,7 +132,6 @@ Voter* const List::find(const char * const name) const
 	// your code here, return the appropriate value
 	
 	Node * node{headByName};
-	//Voter * voterName{nullptr};
 	while(node){
 		if(strcmp(node->item.getName(), name) == 0){
 		

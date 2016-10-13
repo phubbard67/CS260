@@ -5,13 +5,13 @@
 
 using namespace std;
 
-Voter::Voter(const char * const nme, const Party party, const int intensity) :
+Voter::Voter(const char * const newName, const Party party, const int intensity) :
 party{party},
 intensity{intensity}
 {
 	// your code here, or in this constructor's initialization list
-	name = {new char[strlen(nme) + 1]};
-	strcpy(name, nme);
+	name = {new char[strlen(newName) + 1]};
+	strcpy(name, newName);
 }
 Voter::~Voter()
 {
