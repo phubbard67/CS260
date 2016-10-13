@@ -16,7 +16,7 @@ List::~List()
 {
 	// your code here
 	Node * nodeName{headByName};
-	Node * nextName;
+	Node * nextName{nullptr};
 
 	while(nodeName){
 		nextName = nodeName->nextByName;
@@ -163,17 +163,17 @@ bool List::remove(const char * const name)
 		prevPtr = node;
 		node = node->nextByName;
 	}
+
 	node = headByIntensity;
 	prevPtr = nullptr;
+
 	while(node){
 			if(strcmp(node->item.getName(), name) == 0){
 				if(prevPtr == nullptr){
 					headByIntensity = node->nextByIntensity;
-					break;
 				}
 				else{
 					prevPtr->nextByIntensity = node->nextByIntensity;
-					break;
 				}
 				delete node;
 				return true;

@@ -17,6 +17,7 @@ Voter::~Voter()
 {
 	// your code here
 	delete [] name;
+	name = nullptr;
 }
 
 void Voter::displayColumnHeadings(ostream& out)
