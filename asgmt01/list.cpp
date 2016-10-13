@@ -59,10 +59,10 @@ void List::displayByIntensity(ostream& out) const
 
 	Voter::displayColumnHeadings(out);
 
-	while(node){
-		out << &node->item << endl;
-		node = node->nextByName;
-	}
+	do{
+		out << &(node->item) << endl;
+		node = node->nextByIntensity;
+	}while(node);
 }
 
 void List::insert(const Voter& voter)
@@ -118,12 +118,11 @@ void List::insert(const Voter& voter)
 					prevByInten = nodeByInten;
 					nodeByInten = nodeByInten->nextByIntensity;
 			}
-			/*if(nodeByInten == nullptr){
+			if(nodeByInten == nullptr){
 				prevByInten->nextByIntensity = node;
-			}*/
+			}
 		}
 
-	return;
 		
 
 }
@@ -154,22 +153,35 @@ bool List::remove(const char * const name)
 	while(node){
 		if(strcmp(node->item.getName(), name) == 0){
 			if(prevPtr == nullptr){
-				node = headByName;
 				headByName = node->nextByName;
-				headByIntensity = node->nextByIntensity;
-				delete node;
-				return true;
+				break;
 			}
 			else{
-				node = prevPtr->nextByName;
 				prevPtr->nextByName = node->nextByName;
-				prevPtr->nextByIntensity = node->nextByIntensity;
-				delete node;
-				return true;
+				break;
 			}
 		}
 		prevPtr = node;
 		node = node->nextByName;
-	}	
+	}
+	node = headByIntensity;
+	prevPtr = nullptr;
+	while(node){
+			if(strcmp(node->item.getName(), name) == 0){
+				if(prevPtr == nullptr){
+					headByIntensity = node->nextByIntensity;
+					break;
+				}
+				else{
+					prevPtr->nextByIntensity = node->nextByIntensity;
+					break;
+				}
+				delete node;
+				return true;
+			}
+			prevPtr = node;
+			node = node->nextByIntensity;
+		}
+
 	return false;
 }
