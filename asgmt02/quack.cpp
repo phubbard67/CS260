@@ -32,14 +32,13 @@ bool Quack::pushFront(const char ch)
 {	
 	if(frontIndex == 0){
 		items[0] = ch;
+		backIndex = frontIndex;
 		frontIndex = capacity - 1;
-		backIndex = frontIndex - 1;;
 		return true;
 	}
 	else{
 		items[frontIndex] = ch;
-		frontIndex = backIndex;
-		backIndex = frontIndex - 1;
+		frontIndex = frontIndex - 1;
 		return true;
 	}
 
@@ -50,6 +49,11 @@ bool Quack::pushFront(const char ch)
 // (except for when the end of the array "wraps around" to the beginning)
 bool Quack::pushBack(const char ch)
 {
+	if(items[backIndex]){
+		items[backIndex + 1] = ch;
+		backIndex = items[backIndex + 1];
+		return true;
+	}
 	return false;
 }
 
@@ -79,9 +83,10 @@ int	Quack::itemCount(void)
 ostream& operator<<(ostream& out, Quack *q)
 {
 	out << "quack: ";
-	for(int i = 0; i < q->capacity; i++){
-			out << &q->items[i] << (q->items[i] == '\0' ? "" : ", ");
-	}
+		for(int i = 0 ; i < q->capacity; i++){
+			out << q->items[i]; 
+		}
+	
 	out << endl << endl;
 	// returning out is ALWAYS required for an operator<< overload
 	return out;
