@@ -51,7 +51,7 @@ bool Quack::pushBack(const char ch)
 {
 	if(items[backIndex]){
 		items[backIndex + 1] = ch;
-		backIndex = items[backIndex + 1];
+		backIndex = backIndex + 1;
 		return true;
 	}
 	return false;
@@ -82,10 +82,18 @@ int	Quack::itemCount(void)
 
 ostream& operator<<(ostream& out, Quack *q)
 {
+	int index = q->frontIndex;
 	out << "quack: ";
-		for(int i = 0 ; i < q->capacity; i++){
-			out << q->items[i]; 
+		while(index != q->backIndex){
+			out << q->items[index];
+			if(index == (q->capacity - 1)){
+				index = 0;
+			}	
+			else{
+				index = index + 1;
+			}
 		}
+		out << q->items[index];
 	
 	out << endl << endl;
 	// returning out is ALWAYS required for an operator<< overload
