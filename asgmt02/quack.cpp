@@ -85,7 +85,12 @@ ostream& operator<<(ostream& out, Quack *q)
 	int index = q->frontIndex;
 	out << "quack: ";
 		while(index != q->backIndex){
-			out << q->items[index];
+			
+			//if the array @ space index has 
+			//a null char, output a blank space
+			//else out the contents and a comma
+			(q->items[index] == '\0' ? out << "" : out << q->items[index] << ", ");
+			
 			if(index == (q->capacity - 1)){
 				index = 0;
 			}	
