@@ -60,8 +60,9 @@ private:
 	
 	//////////////////added variables
 
-	int  frontIndex;
-	int  backIndex;
+	int frontIndex;
+	int backIndex;
+	int	counter;
 	
 	//////////////////
 public:

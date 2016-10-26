@@ -15,7 +15,8 @@ Quack::Quack(int capacity, int growBy) :
 	items{new char[capacity + growBy]},
 	capacity{capacity + growBy},
 	frontIndex{items[0]},
-	backIndex{items[capacity]}
+	backIndex{items[capacity]},
+	counter{0}
 {
 	initArray();	// you are required to call this function here, and
 					// it must be the first thing in the constructor body
@@ -30,16 +31,26 @@ Quack::~Quack(void)
 // (except for when the beginning of the array "wraps around" to the end)
 bool Quack::pushFront(const char ch)
 {	
-	if(frontIndex == 0){
+	if(counter == 0){
 		items[0] = ch;
-		backIndex = frontIndex;
-		frontIndex = capacity - 1;
+		counter++;
 		return true;
 	}
 	else{
-		items[frontIndex] = ch;
-		frontIndex = frontIndex - 1;
-		return true;
+		if(frontIndex == 0){
+			backIndex = frontIndex;
+			frontIndex = capacity - 1;;
+			items[frontIndex] = ch;
+			counter++;
+			return true;
+		}
+		else{
+			frontIndex = frontIndex - 1;
+			items[frontIndex] = ch;
+			counter++;
+			return true;
+		}
+
 	}
 
 	return false;
@@ -59,6 +70,17 @@ bool Quack::pushBack(const char ch)
 
 bool Quack::popFront(char& ch)
 {
+	
+	if(this->items[frontIndex] == '\0'){
+		frontIndex = frontIndex + 2;
+		items[frontIndex] = ch;
+		return true;
+	}
+	if(ch){
+		frontIndex = frontIndex + 1;
+		items[frontIndex] = ch;
+		return true;
+	}
 	return false;
 }
 
