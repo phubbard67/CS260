@@ -39,7 +39,7 @@ bool Quack::pushFront(const char ch)
 	else{
 		if(frontIndex == 0){
 			backIndex = frontIndex;
-			frontIndex = capacity - 1;;
+			frontIndex = capacity - 1;
 			items[frontIndex] = ch;
 			counter++;
 			return true;
@@ -63,29 +63,47 @@ bool Quack::pushBack(const char ch)
 	if(items[backIndex]){
 		items[backIndex + 1] = ch;
 		backIndex = backIndex + 1;
+		counter += 1;
 		return true;
 	}
 	return false;
 }
 
 bool Quack::popFront(char& ch)
-{
-	
-	if(this->items[frontIndex] == '\0'){
-		frontIndex = frontIndex + 2;
-		items[frontIndex] = ch;
-		return true;
-	}
-	if(ch){
-		frontIndex = frontIndex + 1;
-		items[frontIndex] = ch;
-		return true;
+{	
+	if(counter == 0){
+		return false;
+	}else{
+		ch = items[frontIndex];
+		
+		if(frontIndex == capacity - 1){
+			frontIndex = 0;
+			return true;
+		}else{
+			frontIndex = frontIndex + 1;
+			counter = counter - 1;
+			return true;
+		}
 	}
 	return false;
 }
 
 bool Quack::popBack(char& ch)
 {
+	if(counter == 0){
+		return false;
+	}else{
+		ch = items[backIndex];
+		if(backIndex == (capacity - 1)){
+			backIndex = 0;
+			counter = counter - 1;
+			return true;
+		}else{
+			backIndex = backIndex + 1;
+			counter = counter - 1;
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -99,13 +117,14 @@ void Quack::reverse(void)
 
 int	Quack::itemCount(void)
 {
-	return 0;
+	return counter;
 }
 
 ostream& operator<<(ostream& out, Quack *q)
 {
 	int index = q->frontIndex;
 	out << "quack: ";
+	if(q->counter != 0){
 		while(index != q->backIndex){
 			
 			//if the array @ space index has 
@@ -122,6 +141,11 @@ ostream& operator<<(ostream& out, Quack *q)
 		}
 		out << q->items[index];
 	
+	}
+	else{
+		out << "empty ";
+	}
+
 	out << endl << endl;
 	// returning out is ALWAYS required for an operator<< overload
 	return out;
