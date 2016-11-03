@@ -38,12 +38,11 @@ bool Quack::pushFront(const char ch)
 		return true;
 	}
 	else{
-		if(frontIndex == 0){
-			backIndex = frontIndex;
-			frontIndex = capacity - 1;
-			items[frontIndex] = ch;
-			counter++;
-			return true;
+		if(frontIndex == 0){ 
+				frontIndex = capacity - 1;
+				items[frontIndex] = ch;
+				counter++;
+				return true;
 		}
 		else{
 			frontIndex = frontIndex - 1;
@@ -63,8 +62,11 @@ bool Quack::pushBack(const char ch)
 {	
 	
 	if(items[backIndex]){
-		items[backIndex + 1] = ch;
 		backIndex = backIndex + 1;
+		items[backIndex] = ch;
+
+		//items[backIndex + 1] = ch;
+		//backIndex = backIndex + 1;
 		counter += 1;
 		return true;
 	}
@@ -116,6 +118,24 @@ bool Quack::popBack(char& ch)
 
 void Quack::rotate(int r)
 {
+	if(counter != capacity){
+		if(r > 0){
+			int index = frontIndex;
+
+			items[backIndex + 1] = items[frontIndex];
+			for(int i = 0; i < capacity - counter; i++){
+				items[index] = items[index + 1];
+				index = index + 1;
+			}
+			frontIndex = frontIndex + r;
+			backIndex = backIndex + r;
+			if(frontIndex >= capacity){
+				frontIndex = frontIndex - capacity;
+			}
+		}else if(r < 0){
+			
+		}
+	}
 }
 
 void Quack::reverse(void)
