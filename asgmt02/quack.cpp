@@ -94,12 +94,12 @@ bool Quack::popBack(char& ch)
 		return false;
 	}else{
 		ch = items[backIndex];
-		if(backIndex == (capacity - 1)){
-			backIndex = 0;
+		if(backIndex == (0)){
+			backIndex = capacity - 1;
 			counter = counter - 1;
 			return true;
 		}else{
-			backIndex = backIndex + 1;
+			backIndex = backIndex - 1;
 			counter = counter - 1;
 			return true;
 		}
