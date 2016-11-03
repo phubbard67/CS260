@@ -12,10 +12,11 @@ const bool	Quack::PREMIUM_VERSION{false};
 
 Quack::Quack(int capacity, int growBy) :
 	// replace these initializations with the ones you actually need
-	items{new char[capacity + growBy]},
-	capacity{capacity + growBy},
+	items{new char[capacity]},
+	capacity{capacity},
 	frontIndex{items[0]},
-	backIndex{items[capacity]},
+	growBy{growBy},
+	backIndex{items[0]},
 	counter{0}
 {
 	initArray();	// you are required to call this function here, and
@@ -59,10 +60,16 @@ bool Quack::pushFront(const char ch)
 // items are pushed to successively HIGHER slots in the circular array
 // (except for when the end of the array "wraps around" to the beginning)
 bool Quack::pushBack(const char ch)
-{
+{	
+	
 	if(items[backIndex]){
 		items[backIndex + 1] = ch;
 		backIndex = backIndex + 1;
+		counter += 1;
+		return true;
+	}
+	else if(counter == 0){
+		items[backIndex] = ch;
 		counter += 1;
 		return true;
 	}

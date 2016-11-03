@@ -59,11 +59,10 @@ private:
 	int		capacity;					// # of slots in array
 	
 	//////////////////added variables
-
 	int frontIndex;
+	int growBy;
 	int backIndex;
 	int	counter;
-	
 	//////////////////
 public:
 	friend std::ostream& operator<<(std::ostream& out, Quack *q);
