@@ -63,6 +63,8 @@ private:
 	int growBy;
 	int backIndex;
 	int	counter;
+	char * newItems;
+	int newCapacity;
 	//////////////////
 public:
 	friend std::ostream& operator<<(std::ostream& out, Quack *q);

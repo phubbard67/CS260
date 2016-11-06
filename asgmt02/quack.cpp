@@ -14,10 +14,12 @@ Quack::Quack(int capacity, int growBy) :
 	// replace these initializations with the ones you actually need
 	items{new char[capacity]},
 	capacity{capacity},
-	frontIndex{items[0]},
+	frontIndex{0},
 	growBy{growBy},
-	backIndex{items[0]},
-	counter{0}
+	backIndex{0},
+	counter{0},
+	newItems{new char[capacity + growBy]},
+	newCapacity{capacity + growBy}
 {
 	initArray();	// you are required to call this function here, and
 					// it must be the first thing in the constructor body
@@ -26,12 +28,15 @@ Quack::Quack(int capacity, int growBy) :
 Quack::~Quack(void)
 {
 	delete[] items;
+	delete[] newItems;
 }
 
 // items are pushed to successively LOWER slots in the circular array
 // (except for when the beginning of the array "wraps around" to the end)
 bool Quack::pushFront(const char ch)
-{	
+{
+	int index = frontIndex;
+	
 	if(counter == 0){
 		items[0] = ch;
 		counter++;
@@ -44,77 +49,84 @@ bool Quack::pushFront(const char ch)
 				counter++;
 				return true;
 		}
+		else if(counter == capacity){
+		
+
+			for(int i = 0; i < capacity; i++){
+				newItems[i] = '\0';
+			}
+			
+			for(int i = 0; i < capacity; i++){
+				newItems[i] = items[index];
+				index = (index == (capacity - 1) ? 0 : (index + 1));
+			}
+			
+			delete [] items;
+			items = newItems;
+			newItems = nullptr;
+			capacity = newCapacity;
+			frontIndex = 0;
+			backIndex = capacity - 1;
+
+			frontIndex = frontIndex - 1;
+			items[frontIndex] = ch;
+			counter++;
+			
+			return true;
+		}
 		else{
 			frontIndex = frontIndex - 1;
 			items[frontIndex] = ch;
 			counter++;
 			return true;
 		}
-		if(counter + 1 == capacity){
-			int newCapacity = capacity + growBy;
-			char * newItems = new char[newCapacity];
-			for(int i = 0; i < capacity; i++){
-				newItems[i] = '\0';
-			}
-			
-			for(int i = 0; i < capacity; i++){
-				items[i] = newItems[i];
-			}
-
-			items = newItems;
-			capacity = newCapacity;
-			
-			frontIndex = frontIndex - 1;
-			items[frontIndex] = ch;
-			counter++;
-			
-			delete newItems;
-			return true;
-		}
 
 	}
-
 	return false;
 }
 
 // items are pushed to successively HIGHER slots in the circular array
 // (except for when the end of the array "wraps around" to the beginning)
 bool Quack::pushBack(const char ch)
-{	
+{
+	int index = frontIndex;
+
 	if(counter == 0){
 		items[backIndex] = ch;
 		counter += 1;
 		return true;
 	}
-	else{
-		backIndex = (backIndex  == (capacity - 1) ? 0 : backIndex + 1);
-			items[backIndex] = ch;
-			counter += 1;
-			return true;
-	}
 
-		if(counter + 1 == capacity){
-			int newCapacity = capacity + growBy;
-			char * newItems = new char[newCapacity];
-			for(int i = 0; i < capacity; i++){
-				newItems[i] = '\0';
-			}
+	if(counter  == capacity){
+	 	
+		for(int i = 0; i < newCapacity; i++){
+			newItems[i] = '\0';
+		}
 			
-			for(int i = 0; i < capacity; i++){
-				items[i] = newItems[i];
-			}
+		for(int i = 0; i < capacity; i++){
+			newItems[i] = items[index];
+			index = (index == (capacity - 1) ? 0 : (index + 1));
+		}
 
+			delete [] items;
 			items = newItems;
+			newItems = nullptr;
+			frontIndex = 0;
+			backIndex = capacity - 1;
 			capacity = newCapacity;
-			
+
 			backIndex = (backIndex  == (capacity - 1) ? 0 : backIndex + 1);
 			items[backIndex] = ch;
 			counter += 1;
 			
-			delete newItems;
 			return true;
 		}
-
+		else{
+			backIndex = (backIndex  == (capacity - 1) ? 0 : backIndex + 1);
+			items[backIndex] = ch;
+			counter += 1;
+			return true;
+		}
 	return false;
 }
 
@@ -220,7 +232,14 @@ void Quack::rotate(int r)
 
 void Quack::reverse(void)
 {
+	int length = capacity;
+	char tempChar;
 
+	for(int i = 0; i < capacity/2; i++){
+		tempChar = items[i];
+		items[i] = items[length - i - 1];
+		items[length - i - 1] = tempChar;
+	}
 		
 	
 }
@@ -253,7 +272,8 @@ ostream& operator<<(ostream& out, Quack *q)
 	
 	}
 	else{
-		out << "empty ";
+		out << "empty " << endl << endl;
+		return out;
 	}
 
 	out << endl << endl;
