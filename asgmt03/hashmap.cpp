@@ -5,8 +5,15 @@ using namespace std;
 // change the value of this variable to be your own name instead of "I. Forgot"
 const char	HashMap::YOUR_NAME[] = "Paul Hubbard";
 
-HashMap::HashMap(int capacity)
+HashMap::HashMap(int capacity) :
+slots{new Slot[capacity]},
+capacity{capacity},
+nStocks{0}
 {
+	for(int i = 0; i <= capacity; i++){
+		slots[i].full = false;
+		slots[i].wasFull = false;
+	} 
 }
 
 HashMap::~HashMap(void)
@@ -28,6 +35,16 @@ bool HashMap::put(const Stock& s,
 				  unsigned int& symbolHash, unsigned int& hashIndex,
 				  unsigned int& usedIndex, unsigned int& seqLength)
 {
+	symbolHash = hashStr(s.symbol);
+	hashIndex = symbolHash % capacity;
+	int index = symbolHash % capacity;
+		
+		if(slots[hashIndex].full == false){
+			slots[index].slotStock = s;
+			slots[hashIndex].full = true;
+			return true;
+	}
+
 	return false;
 }
 
@@ -56,8 +73,15 @@ unsigned int HashMap::hashStr(char const * const s)
 	// You can and should do this computation entirely with integers. In other
 	// words, there is no need to use floating point values. In particular, you
 	// should not use the pow() function from <math.h> in this lab.
-
-	return 0;
+	
+	int sInt = s[0];
+	int i = 1;
+	while( s[i] ){
+		sInt *= (32 + s[i]); 
+		i++;
+	}			
+	
+	return sInt;
 }
 
 ostream& operator<<(ostream& out, const HashMap &h)

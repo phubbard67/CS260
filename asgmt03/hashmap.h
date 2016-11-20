@@ -63,10 +63,17 @@ private:
 
 	// Use this struct for each slot in the HashMap's underlying array.
 	// You can add new members to this struct if you need to.
+
+
+
 	struct Slot
 	{
 		Stock	slotStock;
+		bool full;
+		bool wasFull;
 	};
+
+	
 
 	Slot	*slots;							// array of instances of slot
 	int		capacity;						// number of slots in array

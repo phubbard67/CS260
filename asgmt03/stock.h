@@ -32,6 +32,12 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Stock& s);
 
 	friend class HashMap;
+
+private:
+	char*   symbol;
+	char*	name;
+	int		sharePrice;
+	Date	priceDate;
 };
 
 #endif
