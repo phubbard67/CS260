@@ -37,14 +37,41 @@ bool HashMap::put(const Stock& s,
 {
 	symbolHash = hashStr(s.symbol);
 	hashIndex = symbolHash % capacity;
-	int index = symbolHash % capacity;
-		
-		if(slots[hashIndex].full == false){
-			slots[index].slotStock = s;
-			slots[hashIndex].full = true;
-			return true;
-	}
+	seqLength = 1;
+	usedIndex = 0;
 
+	if(slots[hashIndex].full == false){
+		slots[hashIndex].slotStock = s;
+		slots[hashIndex].full = true;
+		usedIndex = hashIndex;
+		nStocks++;
+		return true;
+	}
+	else if(*(slots[hashIndex].slotStock.symbol) != *(s.symbol)){
+		for(int i = hashIndex; i <= capacity; i++){
+			if(slots[i].full == false){
+				slots[i].slotStock.symbol = s.symbol;
+				slots[i].full = true;
+				usedIndex = i;
+				seqLength += i - hashIndex;
+				nStocks++;
+				return true;
+			}
+		} 
+		for(unsigned int i = 0; i <= hashIndex; i++){
+			if(slots[i].full == false){
+				slots[i].slotStock.symbol = s.symbol;
+				slots[i].full = true;
+				usedIndex = i;
+				seqLength = (capacity - hashIndex) + i;
+				nStocks++;
+				return true;
+			}
+		}
+	}
+	else{
+		return false;
+	}
 	return false;
 }
 
@@ -76,8 +103,9 @@ unsigned int HashMap::hashStr(char const * const s)
 	
 	int sInt = s[0];
 	int i = 1;
-	while( s[i] ){
-		sInt *= (32 + s[i]); 
+
+	while(s[i]){
+		sInt =  (sInt * 31) + s[i];
 		i++;
 	}			
 	
@@ -86,6 +114,17 @@ unsigned int HashMap::hashStr(char const * const s)
 
 ostream& operator<<(ostream& out, const HashMap &h)
 {
-	out << "<print the contents of the HashMap>" << endl;
+
+	if(h.nStocks != 0){
+	 Stock::displayHeaders(out);
+	 for(int idx = 0; idx <= h.capacity; idx++){
+			if(h.slots[idx].full == true){
+				out << h.slots[idx].slotStock << endl;
+			}
+		}
+	}
+	else{
+		out << "no stocks" << endl;
+	}
 	return out;
 }
