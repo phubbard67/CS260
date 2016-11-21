@@ -14,8 +14,8 @@ Stock::Stock(char const * const symbol, char const * const name, int sharePrice,
 }
 
 Stock::Stock(void)  :
-symbol{'\0'},
-name{'\0'},
+symbol{new char['\0']},
+name{new char['\0']},
 sharePrice{0},
 priceDate{Date()}
 {
@@ -101,8 +101,10 @@ void Stock::displayHeaders(ostream& out)
 // (e.g. 2483 would print out as 24.83 and 200 would print out as 2.00)
 ostream& operator<<(ostream& out, const Stock& s)
 { 
-	out << left << setw(8) << s.symbol << setw(42) << s.name 
-		<< setw(8) << s.sharePrice << s.priceDate << endl;
+	out << left << setw(8)  << s.symbol 
+				<< setw(42) << s.name 
+				<< setw(1)  << right << right <<  s.sharePrice / 100 << "." <<  setw(2) << setfill('0') << s.sharePrice % 100 << setfill(' ');
+				out << setw(7) << right << s.priceDate << endl;
 	return out;
 }
 

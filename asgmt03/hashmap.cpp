@@ -27,6 +27,20 @@ bool HashMap::get(char const * const symbol, Stock& s,
 {
 	// If the symbol is not found, this function is required
 	// to set usedIndex to -1 before it returns false.
+	symbolHash = hashStr(symbol);
+	hashIndex = symbolHash % capacity;
+	seqLength = 1;
+	usedIndex = 0;
+
+	if(slots[hashIndex].full == true){
+		usedIndex = hashIndex;
+		return true;
+	}
+	else{
+		usedIndex = -1;
+		return false;
+	}
+
 
 	return false;
 }
@@ -47,10 +61,11 @@ bool HashMap::put(const Stock& s,
 		nStocks++;
 		return true;
 	}
-	else if(*(slots[hashIndex].slotStock.symbol) != *(s.symbol)){
-		for(int i = hashIndex; i <= capacity; i++){
+	else if(this->slots[hashIndex].slotStock.symbol != s.symbol){
+
+		for(int i = hashIndex; i < capacity; i++){
 			if(slots[i].full == false){
-				slots[i].slotStock.symbol = s.symbol;
+				slots[i].slotStock = s;
 				slots[i].full = true;
 				usedIndex = i;
 				seqLength += i - hashIndex;
@@ -60,7 +75,7 @@ bool HashMap::put(const Stock& s,
 		} 
 		for(unsigned int i = 0; i <= hashIndex; i++){
 			if(slots[i].full == false){
-				slots[i].slotStock.symbol = s.symbol;
+				slots[i].slotStock = s;
 				slots[i].full = true;
 				usedIndex = i;
 				seqLength = (capacity - hashIndex) + i;
@@ -68,6 +83,9 @@ bool HashMap::put(const Stock& s,
 				return true;
 			}
 		}
+	}
+	else if(nStocks == capacity){
+		return false;
 	}
 	else{
 		return false;
@@ -117,7 +135,7 @@ ostream& operator<<(ostream& out, const HashMap &h)
 
 	if(h.nStocks != 0){
 	 Stock::displayHeaders(out);
-	 for(int idx = 0; idx <= h.capacity; idx++){
+	 for(int idx = 0; idx < h.capacity; idx++){
 			if(h.slots[idx].full == true){
 				out << h.slots[idx].slotStock << endl;
 			}
