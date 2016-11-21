@@ -1,4 +1,5 @@
 #include "hashmap.h"
+#include <cstring>
 
 using namespace std;
 
@@ -52,18 +53,20 @@ bool HashMap::put(const Stock& s,
 	symbolHash = hashStr(s.symbol);
 	hashIndex = symbolHash % capacity;
 	seqLength = 1;
-	usedIndex = 0;
+	usedIndex = hashIndex;
 
 	if(slots[hashIndex].full == false){
 		slots[hashIndex].slotStock = s;
 		slots[hashIndex].full = true;
-		usedIndex = hashIndex;
 		nStocks++;
 		return true;
 	}
-	else if(this->slots[hashIndex].slotStock.symbol != s.symbol){
+	else{
 
 		for(int i = hashIndex; i < capacity; i++){
+			if(strcmp(slots[i].slotStock.getSymbol(), s.symbol) == 0){
+				return false;
+			}
 			if(slots[i].full == false){
 				slots[i].slotStock = s;
 				slots[i].full = true;
@@ -71,9 +74,14 @@ bool HashMap::put(const Stock& s,
 				seqLength += i - hashIndex;
 				nStocks++;
 				return true;
-			}
-		} 
+			}	
+		}
+	
+	
 		for(unsigned int i = 0; i <= hashIndex; i++){
+			if(strcmp(slots[i].slotStock.getSymbol(), s.symbol) == 0){
+				return false;
+			}
 			if(slots[i].full == false){
 				slots[i].slotStock = s;
 				slots[i].full = true;
@@ -82,21 +90,56 @@ bool HashMap::put(const Stock& s,
 				nStocks++;
 				return true;
 			}
-		}
+		}	
 	}
-	else if(nStocks == capacity){
+
+	if(nStocks == capacity){
 		return false;
 	}
 	else{
 		return false;
 	}
 	return false;
+
 }
 
 bool HashMap::remove(char const * const symbol, Stock& s,
 					 unsigned int& symbolHash, unsigned int& hashIndex,
 					 unsigned int& usedIndex, unsigned int& seqLength)
 {
+	symbolHash = hashStr(symbol);
+	hashIndex = symbolHash % capacity;
+	usedIndex = hashIndex;
+	Stock newStock;
+
+	if(strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0){
+		s = slots[hashIndex].slotStock;
+		slots[hashIndex].slotStock = newStock;
+		slots[hashIndex].full = false;
+		slots[hashIndex].wasFull = true;
+		return true;
+	}
+	else{
+		for(int i = hashIndex; i < capacity; i++){
+			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
+				s = slots[i].slotStock;
+				slots[i].slotStock = newStock;
+				slots[i].full = false;
+				slots[i].wasFull = false;
+				return true;
+			}
+		}
+		for(unsigned int i = 0; i <= hashIndex; i++){
+			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
+				s = slots[i].slotStock;
+				slots[i].slotStock = newStock;
+				slots[i].full = false;
+				slots[i].wasFull = true;
+				return true;
+			}
+		}
+	}
+
 	return false;
 }
 
