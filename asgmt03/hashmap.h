@@ -64,13 +64,12 @@ private:
 	// Use this struct for each slot in the HashMap's underlying array.
 	// You can add new members to this struct if you need to.
 
-
+	typedef enum{EMPTY, FULL, WAS_FULL} Status;
 
 	struct Slot
 	{
 		Stock	slotStock;
-		bool full;
-		bool wasFull;
+		Status  slotStatus{EMPTY};
 	};
 
 	

@@ -11,10 +11,6 @@ slots{new Slot[capacity]},
 capacity{capacity},
 nStocks{0}
 {
-	for(int i = 0; i <= capacity; i++){
-		slots[i].full = false;
-		slots[i].wasFull = false;
-	} 
 }
 
 HashMap::~HashMap(void)
@@ -35,25 +31,25 @@ bool HashMap::get(char const * const symbol, Stock& s,
 	seqLength = 0;
 	usedIndex = hashIndex;
 
-	if(nStocks == 0){
+	if(nStocks == 0 && slots[hashIndex].slotStatus == EMPTY){
 		seqLength = 1;
 		usedIndex = -1;
 		return false;
 	}
 
-	if(slots[hashIndex].full == true && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0)){
+	if(slots[hashIndex].slotStatus == FULL && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0)){
 		s = slots[hashIndex].slotStock;
 		seqLength = 1;
 		return true;
 	}
-	else if(slots[hashIndex].wasFull == true && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) != 0)){
+	else if(slots[hashIndex].slotStatus == WAS_FULL && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0)){
 		seqLength = 2;
 		usedIndex = -1;
 		return false;
 	}		
 	else{
 		for(int i = hashIndex; i < capacity; i++){
-			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
+			if(slots[i].slotStatus == FULL && strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
 				s = slots[i].slotStock;
 				seqLength += 1;
 				usedIndex = i;
@@ -62,7 +58,7 @@ bool HashMap::get(char const * const symbol, Stock& s,
 			seqLength++;
 		}
 		for(unsigned int i = 0; i <= hashIndex; i++){
-			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
+			if(slots[i].slotStatus == FULL && strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
 				s = slots[i].slotStock;
 				seqLength += 1;
 				usedIndex = i;
@@ -85,9 +81,9 @@ bool HashMap::put(const Stock& s,
 	seqLength = 0;
 	usedIndex = hashIndex;
 
-	if(slots[hashIndex].full == false){
+	if(slots[hashIndex].slotStatus == EMPTY){
 		slots[hashIndex].slotStock = s;
-		slots[hashIndex].full = true;
+		slots[hashIndex].slotStatus = FULL;
 		seqLength = 1;
 		nStocks++;
 		return true;
@@ -95,12 +91,14 @@ bool HashMap::put(const Stock& s,
 	else{
 
 		for(int i = hashIndex; i < capacity; i++){
-			if(strcmp(slots[i].slotStock.getSymbol(), s.symbol) == 0){
-				return false;
+			if(slots[i].slotStatus == FULL){
+				if(strcmp(slots[i].slotStock.getSymbol(), s.symbol) == 0){
+					return false;
+				}
 			}
-			if(slots[i].full == false){
+			if(slots[i].slotStatus != FULL){
 				slots[i].slotStock = s;
-				slots[i].full = true;
+				slots[i].slotStatus = FULL;
 				usedIndex = i;
 				seqLength += 1;
 				nStocks++;
@@ -110,13 +108,15 @@ bool HashMap::put(const Stock& s,
 		}
 	
 	
-		for(unsigned int i = 0; i <= hashIndex; i++){
-			if(strcmp(slots[i].slotStock.getSymbol(), s.symbol) == 0){
-				return false;
+		for(unsigned int i = 0; i < hashIndex; i++){
+			if(slots[i].slotStatus == FULL){
+				if(strcmp(slots[i].slotStock.getSymbol(), s.symbol) == 0){
+					return false;
+				}
 			}
-			if(slots[i].full == false){
+			if(slots[i].slotStatus != FULL){
 				slots[i].slotStock = s;
-				slots[i].full = true;
+				slots[i].slotStatus = FULL;
 				usedIndex = i;
 				seqLength += 1;
 				nStocks++;
@@ -143,39 +143,39 @@ bool HashMap::remove(char const * const symbol, Stock& s,
 	symbolHash = hashStr(symbol);
 	hashIndex = symbolHash % capacity;
 	usedIndex = hashIndex;
-	Stock newStock;
 	seqLength = 0;
 
-	if(strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0){
+	if((slots[hashIndex].slotStatus != WAS_FULL) && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0)){
 		s = slots[hashIndex].slotStock;
-		slots[hashIndex].slotStock = newStock;
-		slots[hashIndex].full = false;
-		slots[hashIndex].wasFull = true;
-		seqLength = 1;
+		slots[hashIndex].slotStatus = WAS_FULL;
+		seqLength += 1;
+		nStocks--;
 		return true;
 	}
 	else{
 		for(int i = hashIndex; i < capacity; i++){
-			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
-				s = slots[i].slotStock;
-				slots[i].slotStock = newStock;
-				slots[i].full = false;
-				slots[i].wasFull = false;
-				seqLength += 1;
-				usedIndex = i;
-				return true;
+			if((slots[i].slotStatus != WAS_FULL)){
+				if((slots[i].slotStatus != EMPTY) && (strcmp(slots[i].slotStock.getSymbol(), symbol) == 0)){
+					s = slots[i].slotStock;
+					slots[i].slotStatus = WAS_FULL;
+					usedIndex = i;
+					seqLength += 1;
+					nStocks--;
+					return true;
+				}
 			}
 			seqLength++;
 		}
 		for(unsigned int i = 0; i <= hashIndex; i++){
-			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
-				s = slots[i].slotStock;
-				slots[i].slotStock = newStock;
-				slots[i].full = false;
-				slots[i].wasFull = true;
-				usedIndex = i;
-				seqLength += 1;
-				return true;
+			if(slots[i].slotStatus != WAS_FULL){
+				if((slots[i].slotStatus != EMPTY) && (strcmp(slots[i].slotStock.getSymbol(), symbol) == 0)){
+					s = slots[i].slotStock;
+					slots[i].slotStatus = WAS_FULL;
+					usedIndex = i;
+					seqLength += 1;
+					nStocks--;
+					return true;
+				}
 			}
 			seqLength++;
 		}
@@ -220,7 +220,7 @@ ostream& operator<<(ostream& out, const HashMap &h)
 	if(h.nStocks != 0){
 	 Stock::displayHeaders(out);
 	 for(int idx = 0; idx < h.capacity; idx++){
-			if(h.slots[idx].full == true){
+			if(h.slots[idx].slotStatus == 1){
 				out << h.slots[idx].slotStock << endl;
 			}
 		}
