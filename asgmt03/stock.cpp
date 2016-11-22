@@ -23,6 +23,7 @@ priceDate{Date()}
 
 Stock::~Stock(void)
 {
+	delete [] name;
 	name = nullptr;
 	delete [] symbol;
 	symbol = nullptr;
@@ -37,16 +38,11 @@ char const * const Stock::getSymbol(void) const
 //you can choose to implement any of the next 3 items if necessary --
 //if not, feel free not to implement them
 
-Stock::Stock(const Stock& s)
+/*Stock::Stock(const Stock& s)
 {
-	symbol = new char[strlen(s.symbol) + 1];
-	name = new char[strlen(s.name) + 1];
-	strcpy(symbol, s.symbol);
-	strcpy(name, s.name);
-	priceDate = s.priceDate;
-	sharePrice = s.sharePrice;
-}
 
+}
+*/
 Stock& Stock::operator=(const Stock& s)
 {
 	char * tempSym = new char[strlen(s.symbol) + 1];
@@ -62,22 +58,11 @@ Stock& Stock::operator=(const Stock& s)
 	return *this;
 }
 
-Stock& Stock::operator=(Stock const * const s)
+/*Stock& Stock::operator=(Stock const * const s)
 {
-	char * tempSym = new char[strlen(s->symbol) + 1];
-	delete [] symbol;
-	symbol = tempSym;
-	strcpy(symbol, s->symbol);
-	char * tempNm = new char[strlen(s->name) + 1];
-	delete [] name;
-	name = tempNm;
-	strcpy(name, s->name);
-	priceDate = s->priceDate;
-	sharePrice = s->sharePrice;
 
-	return *this;
 }
-
+*/
 
 // display column headers for printout of stocks
 void Stock::displayHeaders(ostream& out)
@@ -103,9 +88,17 @@ ostream& operator<<(ostream& out, const Stock& s)
 { 
 	out << left << setw(8)  << s.symbol 
 				<< setw(42) << s.name 
-				<< setw(1)  << right << right <<  s.sharePrice / 100 << "." <<  setw(2) << setfill('0') << s.sharePrice % 100 << setfill(' ');
-				out << setw(7) << right << s.priceDate << endl;
-	return out;
+				<< right <<  setw(2) << s.sharePrice / 100  << "." << right << setw(1);
+				
+					if(s.sharePrice % 100 < 10){
+						out << "0" << s.sharePrice % 100;
+					}
+					else{
+						out << s.sharePrice % 100;
+					}
+
+				out << left << s.priceDate;
+		return out;
 }
 
 

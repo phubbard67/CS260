@@ -19,6 +19,8 @@ nStocks{0}
 
 HashMap::~HashMap(void)
 {
+	delete [] slots;
+	slots = nullptr;
 }
 
 bool HashMap::get(char const * const symbol, Stock& s,
@@ -30,19 +32,47 @@ bool HashMap::get(char const * const symbol, Stock& s,
 	// to set usedIndex to -1 before it returns false.
 	symbolHash = hashStr(symbol);
 	hashIndex = symbolHash % capacity;
-	seqLength = 1;
-	usedIndex = 0;
+	seqLength = 0;
+	usedIndex = hashIndex;
 
-	if(slots[hashIndex].full == true){
-		usedIndex = hashIndex;
-		return true;
-	}
-	else{
+	if(nStocks == 0){
+		seqLength = 1;
 		usedIndex = -1;
 		return false;
 	}
 
-
+	if(slots[hashIndex].full == true && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0)){
+		s = slots[hashIndex].slotStock;
+		seqLength = 1;
+		return true;
+	}
+	else if(slots[hashIndex].wasFull == true && (strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) != 0)){
+		seqLength = 2;
+		usedIndex = -1;
+		return false;
+	}		
+	else{
+		for(int i = hashIndex; i < capacity; i++){
+			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
+				s = slots[i].slotStock;
+				seqLength += 1;
+				usedIndex = i;
+				return true;
+			}
+			seqLength++;
+		}
+		for(unsigned int i = 0; i <= hashIndex; i++){
+			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
+				s = slots[i].slotStock;
+				seqLength += 1;
+				usedIndex = i;
+				return true;
+			}
+			seqLength++;
+		}
+	}
+	
+	usedIndex = -1;
 	return false;
 }
 
@@ -52,12 +82,13 @@ bool HashMap::put(const Stock& s,
 {
 	symbolHash = hashStr(s.symbol);
 	hashIndex = symbolHash % capacity;
-	seqLength = 1;
+	seqLength = 0;
 	usedIndex = hashIndex;
 
 	if(slots[hashIndex].full == false){
 		slots[hashIndex].slotStock = s;
 		slots[hashIndex].full = true;
+		seqLength = 1;
 		nStocks++;
 		return true;
 	}
@@ -71,10 +102,11 @@ bool HashMap::put(const Stock& s,
 				slots[i].slotStock = s;
 				slots[i].full = true;
 				usedIndex = i;
-				seqLength += i - hashIndex;
+				seqLength += 1;
 				nStocks++;
 				return true;
 			}	
+			seqLength++;
 		}
 	
 	
@@ -86,10 +118,11 @@ bool HashMap::put(const Stock& s,
 				slots[i].slotStock = s;
 				slots[i].full = true;
 				usedIndex = i;
-				seqLength = (capacity - hashIndex) + i;
+				seqLength += 1;
 				nStocks++;
 				return true;
 			}
+			seqLength++;
 		}	
 	}
 
@@ -111,12 +144,14 @@ bool HashMap::remove(char const * const symbol, Stock& s,
 	hashIndex = symbolHash % capacity;
 	usedIndex = hashIndex;
 	Stock newStock;
+	seqLength = 0;
 
 	if(strcmp(slots[hashIndex].slotStock.getSymbol(), symbol) == 0){
 		s = slots[hashIndex].slotStock;
 		slots[hashIndex].slotStock = newStock;
 		slots[hashIndex].full = false;
 		slots[hashIndex].wasFull = true;
+		seqLength = 1;
 		return true;
 	}
 	else{
@@ -126,8 +161,11 @@ bool HashMap::remove(char const * const symbol, Stock& s,
 				slots[i].slotStock = newStock;
 				slots[i].full = false;
 				slots[i].wasFull = false;
+				seqLength += 1;
+				usedIndex = i;
 				return true;
 			}
+			seqLength++;
 		}
 		for(unsigned int i = 0; i <= hashIndex; i++){
 			if(strcmp(slots[i].slotStock.getSymbol(), symbol) == 0){
@@ -135,8 +173,11 @@ bool HashMap::remove(char const * const symbol, Stock& s,
 				slots[i].slotStock = newStock;
 				slots[i].full = false;
 				slots[i].wasFull = true;
+				usedIndex = i;
+				seqLength += 1;
 				return true;
 			}
+			seqLength++;
 		}
 	}
 
