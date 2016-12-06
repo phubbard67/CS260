@@ -10,7 +10,7 @@ const char	BST::YOUR_NAME[]{"Paul Hubbard"};
 // change the value of this variable to true if you're doing the Premium version
 const bool	BST::PREMIUM_VERSION{false};
 
-BST::BST(int capacity)
+BST::BST(int capacity) 
 {
 }
 
@@ -45,19 +45,43 @@ int BST::getSize(void) const
 // display items in the tree by traversing the array from beginning to end
 void BST::displayArrayOrder(ostream& out) const
 {
+	out << "name" 	<< setw(25)
+		<< "leaf?"	<< setw(7)
+		<< "index"  << endl;
+	out << "----"	<< setw(25)
+		<< "-----"	<< setw(7)
+		<< "-----"	<< endl;
 }
 
 // display items in the tree in preorder
 void BST::displayPreOrder(ostream& out) const
 {
+	out << "name" 	<< setw(25)
+		<< "leaf?"	<< setw(7)
+		<< "index"  << endl;
+	out << "----"	<< setw(25)
+		<< "-----"	<< setw(7)
+		<< "-----"	<< endl;
 }
 
 // display items in the tree in inorder
 void BST::displayInOrder(ostream& out) const
 {
+	out << "name" 	<< setw(25)
+		<< "leaf?"	<< setw(7)
+		<< "index"  << endl;
+	out << "----"	<< setw(25)
+		<< "-----"	<< setw(7)
+		<< "-----"	<< endl;
 }
 
 // display items in the tree in postorder
 void BST::displayPostOrder(ostream& out) const
 {
+	out << "name" 	<< setw(25)
+		<< "leaf?"	<< setw(7)
+		<< "index"  << endl;
+	out << "----"	<< setw(25)
+		<< "-----"	<< setw(7)
+		<< "-----"	<< endl;
 }

@@ -5,12 +5,15 @@
 
 using namespace std;
 
-GCS::GCS(char const * const name)
+GCS::GCS(char const * const name) :
+name{strcpy(new char[strlen(name) + 1], name)}
 {
 }
 
 GCS::~GCS()
 {
+	delete [] name;
+	name = nullptr;
 }
 
 GCS& GCS::operator=(const GCS& gcs)
