@@ -36,6 +36,19 @@ private:
 
 	// pointer to the array
 	Item*	items;
+///////////////////////////////////////////Added var and func
+	
+	int 	count;
+
+	//get the index of the children
+	int getRightChild(int parent);
+	int getLeftChild(int parent);
+
+	//find if the parent has children
+	bool hasLeftChild(int parent);
+	bool hasRightChild(int parent);
+	bool hasChildren(int parent);
+
 };
 
 #endif

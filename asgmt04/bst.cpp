@@ -10,12 +10,16 @@ const char	BST::YOUR_NAME[]{"Paul Hubbard"};
 // change the value of this variable to true if you're doing the Premium version
 const bool	BST::PREMIUM_VERSION{false};
 
-BST::BST(int capacity) 
+BST::BST(int capacity) :
+items{new Item[capacity]},
+count{0}
 {
 }
 
 BST::~BST()
 {
+	delete [] items;
+	items = nullptr;
 }
 
 // insert a new item into the BST
@@ -39,7 +43,7 @@ bool BST::remove(const char* key)
 // return number of items contained in the BST
 int BST::getSize(void) const
 {
-	return 0;
+	return count;
 }
 
 // display items in the tree by traversing the array from beginning to end
@@ -84,4 +88,24 @@ void BST::displayPostOrder(ostream& out) const
 	out << "----"	<< setw(25)
 		<< "-----"	<< setw(7)
 		<< "-----"	<< endl;
+}
+/////////////////////////////////////////added functions
+int BST::getLeftChild(int parent){
+	return 0;
+}
+
+int BST::getRightChild(int parent){
+	return 0;
+}
+
+bool BST::hasLeftChild(int parent){
+	return false;
+}
+
+bool BST::hasRightChild(int parent){
+	return false;
+}
+
+bool BST::hasChildren(int parent){
+	return false;
 }
