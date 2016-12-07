@@ -91,21 +91,37 @@ void BST::displayPostOrder(ostream& out) const
 }
 /////////////////////////////////////////added functions
 int BST::getLeftChild(int parent){
-	return 0;
+	return (2 * parent + 1);
 }
 
 int BST::getRightChild(int parent){
-	return 0;
+	return (2 * parent + 2);
 }
 
 bool BST::hasLeftChild(int parent){
-	return false;
+	
+	if(this->items[getLeftChild(parent)].gcs.getName()){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 bool BST::hasRightChild(int parent){
-	return false;
+	if(this->items[getRightChild(parent)].gcs.getName()){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 bool BST::hasChildren(int parent){
-	return false;
+	
+	if((this->items[getLeftChild(parent)].gcs.getName()) && (this->items[getRightChild(parent)].gcs.getName())){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
