@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cstring>
 #include "bst.h"
 
 using namespace std;
@@ -12,7 +13,8 @@ const bool	BST::PREMIUM_VERSION{false};
 
 BST::BST(int capacity) :
 items{new Item[capacity]},
-count{0}
+count{0},
+capacity{capacity}
 {
 }
 
@@ -24,8 +26,38 @@ BST::~BST()
 
 // insert a new item into the BST
 void BST::insert(const GCS& gcs)
-{
-}
+{	
+
+	if(this->items[0].gcs.getName() == nullptr){
+		this->items[0].gcs = gcs;
+		count++;
+		return;
+	}
+	
+	for(int i = 0; i < this->capacity; i++){
+		if(this->items[i].gcs.getName() != nullptr){
+			int nameCmp = strcmp(this->items[i].gcs.getName(), gcs.getName());
+		
+
+			if(nameCmp > 0 && hasLeftChild(i) == false){
+				this->items[getLeftChild(i)].gcs = gcs;
+				count++;
+				return;
+			}
+			else if(nameCmp < 0 && hasRightChild(i) == false){
+				this->items[getRightChild(i)].gcs = gcs;
+				count++;
+				return;
+			}
+		//this needs a little tweaking, but now you 
+		//have to implament 
+		//the growby part. just copy from asgmt03.
+		}
+	}
+	
+	return;
+}	
+
 
 // retrieve item associated with key
 // returns true if it finds key, false if it can't
@@ -55,6 +87,12 @@ void BST::displayArrayOrder(ostream& out) const
 	out << "----"	<< setw(25)
 		<< "-----"	<< setw(7)
 		<< "-----"	<< endl;
+	for(int i = 0; i < capacity; i++){
+		if(items[i].gcs.getName() != nullptr){
+			out << items[i].gcs.getName() 
+				<< setw(32) << i << endl;
+		}
+	}
 }
 
 // display items in the tree in preorder

@@ -39,6 +39,7 @@ private:
 ///////////////////////////////////////////Added var and func
 	
 	int 	count;
+	int		capacity;
 
 	//get the index of the children
 	int getRightChild(int parent);
