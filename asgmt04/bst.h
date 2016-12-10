@@ -40,6 +40,7 @@ private:
 	
 	int 	count;
 	int		capacity;
+	int		recursCount;
 
 	//get the index of the children
 	int getRightChild(int parent) const;
@@ -49,7 +50,12 @@ private:
 	bool hasLeftChild(int parent) const;
 	bool hasRightChild(int parent) const;
 	bool hasChildren(int parent) const;
+	
+	//grow array
+	void growArray(int position);
 
+	//recursive insert
+	void recursInsert(int recursCount, const GCS& gcs); 
 };
 
 #endif
