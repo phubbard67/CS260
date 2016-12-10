@@ -48,7 +48,7 @@ bool operator==(const GCS& gcs1, const GCS& gcs2)
 
 ostream& operator<<(ostream& out, const GCS& gcs)
 {
-	out << gcs.name << endl;
+	out <<  gcs.name << setw(32) ;
 
 	return out;
 }

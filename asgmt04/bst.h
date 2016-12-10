@@ -42,13 +42,13 @@ private:
 	int		capacity;
 
 	//get the index of the children
-	int getRightChild(int parent);
-	int getLeftChild(int parent);
+	int getRightChild(int parent) const;
+	int getLeftChild(int parent) const;
 
 	//find if the parent has children
-	bool hasLeftChild(int parent);
-	bool hasRightChild(int parent);
-	bool hasChildren(int parent);
+	bool hasLeftChild(int parent) const;
+	bool hasRightChild(int parent) const;
+	bool hasChildren(int parent) const;
 
 };
 

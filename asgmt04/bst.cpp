@@ -49,9 +49,6 @@ void BST::insert(const GCS& gcs)
 				count++;
 				return;
 			}
-		//this needs a little tweaking, but now you 
-		//have to implament 
-		//the growby part. just copy from asgmt03.
 		}
 	}
 	
@@ -87,12 +84,22 @@ void BST::displayArrayOrder(ostream& out) const
 	out << "----"	<< setw(25)
 		<< "-----"	<< setw(7)
 		<< "-----"	<< endl;
+	
 	for(int i = 0; i < capacity; i++){
 		if(items[i].gcs.getName() != nullptr){
-			out << items[i].gcs.getName() 
-				<< setw(32) << i << endl;
+			if(hasChildren(i)){
+				out << items[i].gcs.getName() << setw(32 - strlen(items[i].gcs.getName()))
+				    << i << endl;
+			}
+			else{
+				out << items[i].gcs.getName() << setw(28 - strlen(items[i].gcs.getName()))
+					<< "leaf"				  << setw(4)
+					<< i					  
+					<< right << endl;
+			}
 		}
 	}
+
 }
 
 // display items in the tree in preorder
@@ -128,17 +135,20 @@ void BST::displayPostOrder(ostream& out) const
 		<< "-----"	<< endl;
 }
 /////////////////////////////////////////added functions
-int BST::getLeftChild(int parent){
+int BST::getLeftChild(int parent) const{
 	return (2 * parent + 1);
 }
 
-int BST::getRightChild(int parent){
+int BST::getRightChild(int parent) const{
 	return (2 * parent + 2);
 }
 
-bool BST::hasLeftChild(int parent){
-	
-	if(this->items[getLeftChild(parent)].gcs.getName()){
+bool BST::hasLeftChild(int parent) const{
+
+	if(getLeftChild(parent) > capacity){
+		return false;
+	}
+	if(this->items[getLeftChild(parent)].gcs.getName() != nullptr){
 		return true;
 	}
 	else{
@@ -146,17 +156,20 @@ bool BST::hasLeftChild(int parent){
 	}
 }
 
-bool BST::hasRightChild(int parent){
-	if(this->items[getRightChild(parent)].gcs.getName()){
-		return true;
-	}else{
+bool BST::hasRightChild(int parent) const{
+	if(getRightChild(parent) > capacity){
 		return false;
+	}
+	if(this->items[getRightChild(parent)].gcs.getName() == nullptr){
+		return false;
+	}else{
+		return true;
 	}
 }
 
-bool BST::hasChildren(int parent){
+bool BST::hasChildren(int parent) const{
 	
-	if((this->items[getLeftChild(parent)].gcs.getName()) && (this->items[getRightChild(parent)].gcs.getName())){
+	if(hasRightChild(parent) || hasLeftChild(parent)){
 		return true;
 	}
 	else{
