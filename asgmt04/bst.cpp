@@ -32,78 +32,6 @@ void BST::insert(const GCS& gcs)
 
 recursInsert(recursCount, gcs);
 
-/*	//check if array is empty
-	if(count == 0){
-		this->items[0].gcs = gcs;
-		count++;
-		return;
-	}
-
-*/
-
-/*	for(int i = 0; i < this->capacity; i++){
-
-	growArray(i);
-	
-	//insert into tree
-		if(this->items[i].gcs.getName() != nullptr){
-			int nameCmp = strcmp(this->items[i].gcs.getName(), gcs.getName());
-			
-			if(hasChildren(i)){
-				
-				int leftCmp  = (hasLeftChild(i) == true ? strcmp(items[getLeftChild(i)].gcs.getName(), gcs.getName()) : -2);
-				int rightCmp = (hasRightChild(i) == true ? strcmp(items[getRightChild(i)].gcs.getName(), gcs.getName()) : -2);
-
-				growArray(getRightChild(getRightChild(i)));
-				growArray(getLeftChild(getLeftChild(i)));
-				
-				if(hasLeftChild(i) && hasRightChild(i)){
-					//if the left child of parent is less
-					//than the name given, but the right child 
-					//is greater than the name given
-					if(leftCmp < 0 && rightCmp > 0 && hasLeftChild(getRightChild(i)) == false && hasRightChild(getRightChild(i)) == false){
-						this->items[getLeftChild(getRightChild(i))].gcs = gcs;
-						count++;
-						return;
-					}
-					//if the left child of the parent is less
-					//than the name given, and the right child
-					//is less than the name given
-					if(leftCmp < 0 && rightCmp < 0 && hasRightChild(getLeftChild(i)) == false && hasLeftChild(getLeftChild(i)) == false){
-						this->items[getRightChild(getLeftChild(i))].gcs = gcs;
-						count++;
-						return;
-					}
-					if(leftCmp > 0 && hasLeftChild(getLeftChild(i)) == false && hasRightChild(getLeftChild(i)) == false){
-						this->items[getLeftChild(getLeftChild(i))].gcs = gcs;
-						count++;
-						return;
-					}
-					if(rightCmp > 0 && hasRightChild(getRightChild(i)) == false && hasLeftChild(getRightChild(i)) == false){
-						this->items[getRightChild(getRightChild(i))].gcs = gcs;
-						count++;
-						return;
-					}
-				}
-				
-				else if(hasLeftChild(i) && hasRightChild(i) == false){
-					
-				}
-			}
-
-			if(nameCmp > 0 && hasLeftChild(i) == false){
-				this->items[getLeftChild(i)].gcs = gcs;
-				count++;
-				return;
-			}
-			else if(nameCmp < 0 && hasRightChild(i) == false){
-				this->items[getRightChild(i)].gcs = gcs;
-				count++;
-				return;
-			}
-		}
-	}
-*/	
 	return;
 }	
 
@@ -258,6 +186,7 @@ void BST::recursInsert(int recursCount, const GCS& gcs){
 
 	if(items[recursCount].gcs.getName() == nullptr){
 		items[recursCount].gcs = gcs;
+		count++;
 	}
 	else if(strcmp(items[recursCount].gcs.getName(), gcs.getName()) > 0){
 		recursInsert(getLeftChild(recursCount), gcs);
