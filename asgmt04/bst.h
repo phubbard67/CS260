@@ -40,6 +40,7 @@ private:
 	
 	int 	count;
 	int		capacity;
+	int		recursPosition;
 	int		recursCount;
 
 	//get the index of the children
@@ -55,7 +56,19 @@ private:
 	void growArray(int position);
 
 	//recursive insert
-	void recursInsert(int recursCount, const GCS& gcs); 
+	void recursInsert(int recursCount, const GCS& gcs);
+
+	//recursive retrieve 
+	void recursRetrieve(const char * key, int recursCount, GCS const *& gcs) const;
+
+	//print in order
+	void printInOrder(int position) const;
+
+	//print post order
+	void printPostOrder(int position) const;
+	
+	//print pre order
+	void printPreOrder(int position) const;
 };
 
 #endif

@@ -15,6 +15,7 @@ BST::BST(int capacity) :
 items{new Item[capacity]},
 count{0},
 capacity{capacity},
+recursPosition{0},
 recursCount{0}
 {
 }
@@ -40,7 +41,15 @@ recursInsert(recursCount, gcs);
 // returns true if it finds key, false if it can't
 bool BST::retrieve(const char* key, GCS const *& gcs) const
 {
-	return false;
+
+	recursRetrieve(key, recursCount, gcs);
+
+	if(strcmp(gcs->getName(), key) == 0){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 // remove item associated with key from BST
@@ -93,6 +102,10 @@ void BST::displayPreOrder(ostream& out) const
 	out << "----"	<< setw(25)
 		<< "-----"	<< setw(7)
 		<< "-----"	<< endl;
+
+	printPreOrder(recursCount);
+
+	out << "(items printed)" << setw(23) << "(" << count << ")" << endl;
 }
 
 // display items in the tree in inorder
@@ -104,6 +117,10 @@ void BST::displayInOrder(ostream& out) const
 	out << "----"	<< setw(25)
 		<< "-----"	<< setw(7)
 		<< "-----"	<< endl;
+
+	printInOrder(recursCount);
+
+	out << "(items printed)" << setw(23) << "(" << count << ")" << endl;
 }
 
 // display items in the tree in postorder
@@ -115,6 +132,10 @@ void BST::displayPostOrder(ostream& out) const
 	out << "----"	<< setw(25)
 		<< "-----"	<< setw(7)
 		<< "-----"	<< endl;
+
+	printPostOrder(recursCount);
+	
+	out << "(items printed)" << setw(23) << "(" << count << ")" << endl;
 }
 /////////////////////////////////////////added functions
 int BST::getLeftChild(int parent) const{
@@ -194,4 +215,90 @@ void BST::recursInsert(int recursCount, const GCS& gcs){
 	else{
 		recursInsert(getRightChild(recursCount), gcs);
 	}
+}
+
+void BST::recursRetrieve(const char * key, int recursCount, GCS const *& gcs) const{
+
+	if(this->items[recursCount].gcs.getName() == nullptr){
+		gcs = &items[0].gcs;
+	}
+
+	if(this->items[recursCount].gcs.getName() != nullptr && strcmp(items[recursCount].gcs.getName(), key) == 0){
+		gcs = &items[recursCount].gcs;
+	}
+	else if(this->items[recursCount].gcs.getName() != nullptr && strcmp(items[recursCount].gcs.getName(), key) > 0){
+		if(recursCount < capacity){
+			recursRetrieve(key, getLeftChild(recursCount), gcs);
+		}
+	}
+	else{
+		if(recursCount < capacity && this->items[recursCount].gcs.getName() != nullptr){
+			recursRetrieve(key, getRightChild(recursCount), gcs);
+		}
+	}
+	
+}
+
+void BST::printInOrder(int position) const{
+	if(hasLeftChild(position)){
+		printInOrder(getLeftChild(position));
+	}
+		if(hasChildren(position)){
+				cout << items[position].gcs.getName() << setw(36 - strlen(items[position].gcs.getName()))
+				     << position << endl;
+			}
+			else{
+				cout << items[position].gcs.getName() << setw(28 - strlen(items[position].gcs.getName()))
+					<< "leaf"				  << setw(8)
+					<< position					  
+					<< right << endl;
+			}
+
+	if(hasRightChild(position)){
+		printInOrder(getRightChild(position));
+	}
+}
+
+void BST::printPreOrder(int position) const{
+
+	if(hasChildren(position)){
+			cout << items[position].gcs.getName() << setw(36 - strlen(items[position].gcs.getName()))
+			     << position << endl;
+		}
+	else{
+		cout << items[position].gcs.getName() << setw(28 - strlen(items[position].gcs.getName()))
+			<< "leaf"				  << setw(8)
+			<< position					  
+			<< right << endl;
+	}
+
+	if(hasLeftChild(position)){
+		printPreOrder(getLeftChild(position));
+	}
+	if(hasRightChild(position)){
+		printPreOrder(getRightChild(position));
+	}
+
+}
+
+void BST::printPostOrder(int position) const{
+
+	if(hasLeftChild(position)){
+		printPostOrder(getLeftChild(position));
+	}
+	if(hasRightChild(position)){
+		printPostOrder(getRightChild(position));
+	}
+
+	if(hasChildren(position)){
+			cout << items[position].gcs.getName() << setw(36 - strlen(items[position].gcs.getName()))
+			     << position << endl;
+		}
+	else{
+		cout << items[position].gcs.getName() << setw(28 - strlen(items[position].gcs.getName()))
+			<< "leaf"				  << setw(8)
+			<< position					  
+			<< right << endl;
+	}
+
 }
