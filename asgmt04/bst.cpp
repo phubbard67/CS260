@@ -9,13 +9,12 @@ using namespace std;
 const char	BST::YOUR_NAME[]{"Paul Hubbard"};
 
 // change the value of this variable to true if you're doing the Premium version
-const bool	BST::PREMIUM_VERSION{false};
+const bool	BST::PREMIUM_VERSION{true};
 
 BST::BST(int capacity) :
 items{new Item[capacity]},
 count{0},
 capacity{capacity},
-recursPosition{0},
 recursCount{0}
 {
 }
@@ -55,6 +54,24 @@ bool BST::retrieve(const char* key, GCS const *& gcs) const
 // remove item associated with key from BST
 bool BST::remove(const char* key)
 {
+	int temp = 0;
+	
+	while(items[temp].gcs.getName() != nullptr && strcmp(items[temp].gcs.getName(), key) != 0) {
+		if(strcmp(items[temp].gcs.getName(), key) > 0){
+			temp = getLeftChild(temp);
+		} 
+		else{
+			temp = getRightChild(temp);
+		}
+	}
+	
+	if(items[temp].gcs.getName() != nullptr){
+		if(hasLeftChild(temp) == false && hasRightChild(temp) == false){
+			items[temp].gcs.setName(nullptr);
+			count--;
+			return true;
+		}
+	}
 	return false;
 }
 

@@ -30,7 +30,8 @@ GCS::GCS(const GCS& source)
 void GCS::setName(char const * const name)
 {
 	if(this->name != nullptr){delete [] this->name; this->name = nullptr;}
-	this-> name = strcpy(new char[strlen(name) + 1], this->name);
+	if(name != nullptr){this-> name = strcpy(new char[strlen(name) + 1], this->name);}
+	if(name == nullptr){this->name = nullptr;}
 }
 
 bool operator<(const GCS& gcs1, const GCS& gcs2)

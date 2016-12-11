@@ -40,7 +40,6 @@ private:
 	
 	int 	count;
 	int		capacity;
-	int		recursPosition;
 	int		recursCount;
 
 	//get the index of the children
