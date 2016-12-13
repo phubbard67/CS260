@@ -59,7 +59,7 @@ private:
 	void recursInsert(int recursCount, const GCS& gcs);
 
 	//recursive retrieve 
-	void recursRetrieve(const char * key, int recursCount, GCS const *& gcs) const;
+	void recursRetrieve(const char * key,  int recursCount, GCS const *& gcs) const;
 
 	//print in order
 	void printInOrder(int position) const;

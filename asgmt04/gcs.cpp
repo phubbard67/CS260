@@ -12,8 +12,8 @@ name{strcpy(new char[strlen(name) + 1], name)}
 
 GCS::~GCS()
 {
-	delete [] name;
-	name = nullptr;
+	delete [] this->name;
+	this->name = nullptr;
 }
 
 GCS& GCS::operator=(const GCS& gcs)
@@ -29,8 +29,9 @@ GCS::GCS(const GCS& source)
 
 void GCS::setName(char const * const name)
 {
-	if(this->name != nullptr){delete [] this->name; this->name = nullptr;}
-	if(name == nullptr){this->name = nullptr;}
+	delete [] this->name;
+	this->name = nullptr;
+
 	if(name != nullptr){ 
 		this->name = strcpy(new char[strlen(name) + 1], name);
 	}
@@ -52,7 +53,7 @@ bool operator==(const GCS& gcs1, const GCS& gcs2)
 
 ostream& operator<<(ostream& out, const GCS& gcs)
 {
-	out <<  gcs.name ;
+	out <<  gcs.name << "" ;
 
 	return out;
 }

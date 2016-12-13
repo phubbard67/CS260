@@ -49,6 +49,8 @@ bool BST::retrieve(const char* key, GCS const *& gcs) const
 	else{
 		return false;
 	}
+
+return false;
 }
 
 // remove item associated with key from BST
@@ -71,7 +73,7 @@ bool BST::remove(const char* key)
 	//is it a leaf?
 	if(items[temp].gcs.getName() != nullptr){
 		if(hasLeftChild(temp) == false && hasRightChild(temp) == false){
-			items[temp].gcs.setName(nullptr);
+			items[temp].gcs.setName('\0');
 			count--;
 			return true;
 		}
@@ -87,7 +89,7 @@ bool BST::remove(const char* key)
 		}
 
 		if(items[getRightChild(inOrderPos)].gcs.getName() == nullptr){
-			items[inOrderPos].gcs.setName(nullptr);
+			items[inOrderPos].gcs.setName('\0');
 			count--;
 			return true;
 		}
@@ -95,10 +97,10 @@ bool BST::remove(const char* key)
 			inOrderPosTwo = inOrder(inOrderPos);
 			
 			if(items[inOrderPosTwo].gcs.getName() != nullptr){
-				items[inOrderPos].gcs = items[inOrderPosTwo].gcs;
+				items[inOrderPos].gcs.setName(items[inOrderPosTwo].gcs.getName());
 			}
 			if(items[getRightChild(inOrderPosTwo)].gcs.getName() == nullptr){
-				items[inOrderPosTwo].gcs.setName(nullptr);
+				items[inOrderPosTwo].gcs.setName('\0');
 				count--;
 				return true;
 			}
@@ -111,7 +113,7 @@ bool BST::remove(const char* key)
 			inOrderPos = preOrderInOrder(temp);
 
 			if(items[inOrderPos].gcs.getName() != nullptr){
-				items[temp].gcs = items[inOrderPos].gcs;
+				items[temp].gcs.setName(items[inOrderPos].gcs.getName());
 				items[inOrderPos].gcs.setName(nullptr);
 				count--;
 				return true;
@@ -123,7 +125,7 @@ bool BST::remove(const char* key)
 			inOrderPos = inOrder(temp);
 
 			if(items[inOrderPos].gcs.getName() != nullptr){
-				items[temp].gcs = items[inOrderPos].gcs;
+				items[temp].gcs.setName(items[inOrderPos].gcs.getName());
 			}
 
 			if(items[getRightChild(inOrderPos)].gcs.getName() == nullptr){
@@ -135,7 +137,7 @@ bool BST::remove(const char* key)
 				inOrderPosTwo = inOrder(inOrderPos);
 				
 				if(items[inOrderPosTwo].gcs.getName() != nullptr){
-					items[inOrderPos].gcs = items[inOrderPosTwo].gcs;
+					items[inOrderPos].gcs.setName(items[inOrderPosTwo].gcs.getName());
 				}
 				if(items[getRightChild(inOrderPosTwo)].gcs.getName() == nullptr){
 					items[inOrderPosTwo].gcs.setName(nullptr);
@@ -308,7 +310,7 @@ void BST::recursInsert(int recursCount, const GCS& gcs){
 	growArray(recursCount);
 
 	if(items[recursCount].gcs.getName() == nullptr){
-		items[recursCount].gcs.setName(gcs.getName());
+		this->items[recursCount].gcs.setName(gcs.getName());
 		count++;
 	}
 	else if(strcmp(items[recursCount].gcs.getName(), gcs.getName()) > 0){
@@ -338,7 +340,8 @@ void BST::recursRetrieve(const char * key, int recursCount, GCS const *& gcs) co
 			recursRetrieve(key, getRightChild(recursCount), gcs);
 		}
 	}
-	
+
+
 }
 
 void BST::printInOrder(int position) const{
