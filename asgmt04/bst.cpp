@@ -55,7 +55,10 @@ bool BST::retrieve(const char* key, GCS const *& gcs) const
 bool BST::remove(const char* key)
 {
 	int temp = 0;
-	
+	int inOrderPos = 0;
+	int inOrderPosTwo = 0;
+
+	//find the name	
 	while(items[temp].gcs.getName() != nullptr && strcmp(items[temp].gcs.getName(), key) != 0) {
 		if(strcmp(items[temp].gcs.getName(), key) > 0){
 			temp = getLeftChild(temp);
@@ -65,12 +68,84 @@ bool BST::remove(const char* key)
 		}
 	}
 	
+	//is it a leaf?
 	if(items[temp].gcs.getName() != nullptr){
 		if(hasLeftChild(temp) == false && hasRightChild(temp) == false){
 			items[temp].gcs.setName(nullptr);
 			count--;
 			return true;
 		}
+	}
+	 
+	//is it a parent of two chldren?
+	if(hasLeftChild(temp) == true  && hasRightChild(temp) == true){
+		
+		inOrderPos = inOrder(temp);
+
+		if(items[inOrderPos].gcs.getName() != nullptr){
+			items[temp].gcs = items[inOrderPos].gcs;
+		}
+
+		if(items[getRightChild(inOrderPos)].gcs.getName() == nullptr){
+			items[inOrderPos].gcs.setName(nullptr);
+			count--;
+			return true;
+		}
+		else{
+			inOrderPosTwo = inOrder(inOrderPos);
+			
+			if(items[inOrderPosTwo].gcs.getName() != nullptr){
+				items[inOrderPos].gcs = items[inOrderPosTwo].gcs;
+			}
+			if(items[getRightChild(inOrderPosTwo)].gcs.getName() == nullptr){
+				items[inOrderPosTwo].gcs.setName(nullptr);
+				count--;
+				return true;
+			}
+		}
+	}
+	//does it have one child?
+	else{
+		if(hasLeftChild(temp) && hasRightChild(temp) == false){
+			
+			inOrderPos = preOrderInOrder(temp);
+
+			if(items[inOrderPos].gcs.getName() != nullptr){
+				items[temp].gcs = items[inOrderPos].gcs;
+				items[inOrderPos].gcs.setName(nullptr);
+				count--;
+				return true;
+			}
+
+		}
+		else if(hasRightChild(temp) && hasLeftChild(temp) == false){
+			
+			inOrderPos = inOrder(temp);
+
+			if(items[inOrderPos].gcs.getName() != nullptr){
+				items[temp].gcs = items[inOrderPos].gcs;
+			}
+
+			if(items[getRightChild(inOrderPos)].gcs.getName() == nullptr){
+				items[inOrderPos].gcs.setName(nullptr);
+				count--;
+				return true;
+			}
+			else{
+				inOrderPosTwo = inOrder(inOrderPos);
+				
+				if(items[inOrderPosTwo].gcs.getName() != nullptr){
+					items[inOrderPos].gcs = items[inOrderPosTwo].gcs;
+				}
+				if(items[getRightChild(inOrderPosTwo)].gcs.getName() == nullptr){
+					items[inOrderPosTwo].gcs.setName(nullptr);
+					count--;
+					return true;
+				}
+			}
+
+		}
+		
 	}
 	return false;
 }
@@ -190,6 +265,16 @@ bool BST::hasRightChild(int parent) const{
 bool BST::hasChildren(int parent) const{
 	
 	if(hasRightChild(parent) || hasLeftChild(parent)){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool BST::hasBothChildren(int parent) const{
+	
+	if(hasRightChild(parent) && hasLeftChild(parent)){
 		return true;
 	}
 	else{
@@ -319,3 +404,33 @@ void BST::printPostOrder(int position) const{
 	}
 
 }
+
+int BST::preOrderInOrder(int position)const {
+	
+	int inOrderPos = getLeftChild(position);
+
+	while(items[inOrderPos].gcs.getName() != nullptr){
+		inOrderPos = getRightChild(inOrderPos);
+	}
+
+	inOrderPos = (inOrderPos - 1) / 2;
+
+	return inOrderPos;
+
+}
+int BST::inOrder(int position) const {
+	
+	int inOrderPos = getRightChild(position);
+
+	
+	while(items[inOrderPos].gcs.getName() != '\0'){
+			inOrderPos = getLeftChild(inOrderPos);
+	}
+
+	inOrderPos = (inOrderPos - 1) / 2;
+
+	return inOrderPos;
+
+}
+
+

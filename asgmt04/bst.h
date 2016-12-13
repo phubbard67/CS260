@@ -50,6 +50,7 @@ private:
 	bool hasLeftChild(int parent) const;
 	bool hasRightChild(int parent) const;
 	bool hasChildren(int parent) const;
+	bool hasBothChildren(int parent) const;
 	
 	//grow array
 	void growArray(int position);
@@ -68,6 +69,15 @@ private:
 	
 	//print pre order
 	void printPreOrder(int position) const;
+
+	//find inorder
+	int inOrder(int position) const;
+
+	//find the in order preorder 
+	//for removing parents with 
+	//left child only
+	int preOrderInOrder(int position) const;
+
 };
 
 #endif
