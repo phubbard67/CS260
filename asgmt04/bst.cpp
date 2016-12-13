@@ -83,7 +83,7 @@ bool BST::remove(const char* key)
 		inOrderPos = inOrder(temp);
 
 		if(items[inOrderPos].gcs.getName() != nullptr){
-			items[temp].gcs = items[inOrderPos].gcs;
+			items[temp].gcs.setName(items[inOrderPos].gcs.getName());
 		}
 
 		if(items[getRightChild(inOrderPos)].gcs.getName() == nullptr){
@@ -291,7 +291,7 @@ void BST::growArray(int position){
 
 		for(int i = 0; i < capacity; i++){
 			if(items[i].gcs.getName() != nullptr){
-				newItems[i].gcs = items[i].gcs;
+				newItems[i].gcs.setName(items[i].gcs.getName());
 			}
 		}
 
@@ -308,7 +308,7 @@ void BST::recursInsert(int recursCount, const GCS& gcs){
 	growArray(recursCount);
 
 	if(items[recursCount].gcs.getName() == nullptr){
-		items[recursCount].gcs = gcs;
+		items[recursCount].gcs.setName(gcs.getName());
 		count++;
 	}
 	else if(strcmp(items[recursCount].gcs.getName(), gcs.getName()) > 0){

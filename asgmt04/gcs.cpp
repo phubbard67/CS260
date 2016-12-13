@@ -32,7 +32,7 @@ void GCS::setName(char const * const name)
 	if(this->name != nullptr){delete [] this->name; this->name = nullptr;}
 	if(name == nullptr){this->name = nullptr;}
 	if(name != nullptr){ 
-		this->name = strcpy(new char[strlen(name) + 1], this->name);
+		this->name = strcpy(new char[strlen(name) + 1], name);
 	}
 	
 }
